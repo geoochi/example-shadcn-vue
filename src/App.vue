@@ -8,7 +8,7 @@ import '@/global.css'
 
 useDark()
 const router = useRouter()
-const pageIgnores = ['/page', '/sidebar']
+const pageIgnores = ['/page-dashboard', '/page-doc', '/sidebar']
 const { escape } = useMagicKeys()
 watch(escape, v => {
   if (v) router.push('/')
