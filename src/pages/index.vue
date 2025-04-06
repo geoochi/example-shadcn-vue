@@ -1,14 +1,26 @@
 <script setup lang="ts">
-import { useHead } from '@unhead/vue'
-import { ref } from 'vue'
-import { Button } from '@/components/ui/button'
+import { useRouter } from 'vue-router'
+import { cn } from '@/lib/utils'
 
-useHead({ title: 'home page' })
-const count = ref(0)
+const router = useRouter()
+const pages = router.getRoutes().sort((a, b) => a.path.localeCompare(b.path))
+const notAvailable = ['index', '404', 'not-found']
+// console.log(pages)
 </script>
 
 <template>
-  <p>Home Page</p>
-  <RouterLink to="/about" class="underline">link to about</RouterLink>
-  <Button @click="count++">count: {{ count }}</Button>
+  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 w-full max-w-7xl gap-4 px-4">
+    <RouterLink
+      v-for="route in pages.filter(route => !notAvailable.includes(route.name as string))"
+      :to="route.path"
+      :class="
+        cn(
+          'px-10 py-4 text-center outline outline-gray-300 dark:outline-gray-700',
+          'rounded-md hover:bg-gray-100 dark:hover:bg-gray-900'
+        )
+      "
+    >
+      {{ route.name }}
+    </RouterLink>
+  </div>
 </template>

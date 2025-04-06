@@ -4,5 +4,12 @@ import App from './App.vue'
 
 export const createApp = ViteSSG(App, {
   base: import.meta.env.BASE_URL,
-  routes,
+  routes: [
+    ...routes,
+    {
+      path: '/:pathMatch(.*)*',
+      name: 'not-found',
+      component: () => import('@/pages/404.vue'),
+    },
+  ],
 })

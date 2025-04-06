@@ -1,20 +1,31 @@
 <script setup lang="ts">
-import { useDark } from '@vueuse/core'
-import { Moon, Sun } from 'lucide-vue-next'
-import { useHead } from '@unhead/vue'
+import { useDark, useMagicKeys } from '@vueuse/core'
+import { watch } from 'vue'
+import { useRouter } from 'vue-router'
+import { Toaster } from '@/components/ui/sonner'
+
 import '@/global.css'
 
-const isDark = useDark()
-
-useHead({
-  meta: [{ name: 'description', content: 'template - vite@6 - vite-ssg@26 - shadcn-vue@2' }],
+useDark()
+const router = useRouter()
+const pageIgnores = ['/page', '/sidebar']
+const { escape } = useMagicKeys()
+watch(escape, v => {
+  if (v) router.push('/')
 })
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center h-screen gap-4">
-    <Moon v-if="isDark" @click="isDark = !isDark" />
-    <Sun v-else @click="isDark = !isDark" />
-    <RouterView />
+  <Toaster />
+  <div class="flex h-screen flex-col">
+    <p
+      v-if="!pageIgnores.includes(router.currentRoute.value.path)"
+      class="text-center text-8xl text-gray-100 dark:text-gray-900"
+    >
+      press esc to go home
+    </p>
+    <div class="flex flex-1 items-center justify-center">
+      <RouterView />
+    </div>
   </div>
 </template>
